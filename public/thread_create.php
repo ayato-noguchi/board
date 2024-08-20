@@ -6,21 +6,20 @@ $app->run();
 
 ?>
 <h1 class="page__ttl">新規スレッド</h1>
-<form action="" method="post" class="form-group new_thread" id="new_thread">
-  <div class="form-group">
-    <label>名前</label>
-    <input type="text" name="user_name" class="form-control" value="<?= isset($_POST['user_name']) ? h($_POST['user_name']) : ''; ?>">
-  </div>
+<form action="" method="post" class="form-group thread_form" id="new_thread">
   <div class="form-group">
     <label>タイトル</label>
-    <input type="text" name="title" class="form-control" value="<?= isset($_POST['title']) ? h($_POST['title']) : ''; ?>">
+    <input type="text" name="title" id="title" class="form-control" value="<?= isset($_POST['title']) ? h($_POST['title']) : ''; ?>">
+    <p id="err2" class="err"></p>
   </div>
   <div class="form-group">
     <label>コメント</label>
-    <textarea type="text" name="comment" class="form-control"><?= isset($_POST['comment']) ? h($_POST['comment']) : ''; ?></textarea>
-    <input type="hidden" name="token" value="<?= h($_SESSION['token']) ; ?>">
+    <textarea type="text" name="comment" id="comment" class="form-control"><?= isset($_POST['comment']) ? h($_POST['comment']) : ''; ?></textarea>
+    <input type="hidden" name="token" id="token" value="<?= h($_SESSION['token']) ; ?>">
     <input type="hidden" name="type" value="createthread">
-    <p class="err"></p>
+    <p id="err3" class="err"></p>
   </div>
-  <div class="form-group btn btn-primary" onclick="document.getElementById('new_thread').submit();">作成</div>
+  <button type="submit" class="btn btn-primary" id="send" >作成</button>
 </form>
+<script src="./js/validation.js"></script>
+<script src="./js/send.js"></script>

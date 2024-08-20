@@ -13,16 +13,10 @@ $threads = $threadModel->getThreadAll();
         <h2 class="thread__ttl">
           <?= h($thread->title); ?>
         </h2>
-        <div><i class="fas fa-star"></i></div>
       </div>
       <ul class="thread__body">
         <li class="comment__item">
-          <div class="comment__item__head">
-          
-            <span class="comment__item__name"><?= h($thread->user_name); ?></span>
-            <span class="comment__item__num"><?= h($thread->comment); ?></span>
-          </div>
-
+            <span class="comment__item__content"><?= h($thread->comment); ?></span>
         </li>
       </ul>
       <div class="operation">

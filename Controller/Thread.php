@@ -24,7 +24,12 @@ class Thread  extends \Board\Controller
 
       if($_POST['type'] === 'delete_thread')
       {
-        $this->delteThread();
+        $this->deleteThread();
+      }
+
+      if($_POST['type'] === 'search_thread')
+      {
+        $this->searchThread();
       }
     }
   }
@@ -32,7 +37,8 @@ class Thread  extends \Board\Controller
 
   protected function createThread()
   {
-    // var_dump($_POST);
+    $this->validateToken();
+
     $threadModel = new \Board\Model\Thread();
 
     $threadModel->createThread([
@@ -40,7 +46,16 @@ class Thread  extends \Board\Controller
       'title' => $_POST['title'],
       'comment' => $_POST['comment'],
     ]);
-    header('Location: thread_all.php');
+
+    // $response = array(
+    //   "status" => "success",
+    //   "message" => "スレッドが作成されました"
+    // );
+
+    // header("Content-type: application/json; charset=UTF-8");
+   
+    // echo json_encode($response);
+
     exit;
   }
 
@@ -49,7 +64,6 @@ class Thread  extends \Board\Controller
     $threadModel = new \Board\Model\Thread();
 
     $threadModel->updateThread([
-      'user_name' => $_POST['user_name'],
       'title' => $_POST['title'],
       'comment' => $_POST['comment'],
       'id' => $_POST['id'],
@@ -59,17 +73,31 @@ class Thread  extends \Board\Controller
     exit;
   }
 
- protected function delteThread()
- {
-  $this->validateToken();
+  protected function deleteThread()
+  {
+    $this->validateToken();
 
-  $threadModel = new \Board\Model\Thread();
-  var_dump($_POST['id']);
-  $threadModel->deleteThread($_POST['id']);
+    $threadModel = new \Board\Model\Thread();
+    // var_dump($_POST['id']);
+    $threadModel->deleteThread($_POST['id']);
+    
+    header('Location: thread_all.php');
+    exit;
+  }
+
+  protected function searchThread()
+  {
   
-  header('Location: thread_all.php');
-  exit;
-}
+    $threadModel = new \Board\Model\Thread();
+
+    $searchResult = $threadModel->searchThread($_POST['search']);
+    //var_dump($searchResult);
+    $_SESSION['search_result'] = $searchResult;
+
+    header('Location: thread_result.php');
+
+     exit;
+  }
 }
 
 ?>

@@ -13,10 +13,9 @@ class Thread extends \Board\Model
     // var_dump($values);
     try {
       $this->db->beginTransaction();
-      $sql = "INSERT INTO threads (user_name,title,comment,created_at,modified_at)VALUES (:user_name,:title,:comment,now(),now())";
+      $sql = "INSERT INTO threads (title,comment,created_at,modified_at)VALUES (:title,:comment,now(),now())";
       $stmt = $this->db->prepare($sql);
       //名前付けされたプレースホルダを用いてプリペアドステートメントを実行
-      $stmt->bindValue(':user_name', $values['user_name']);
       $stmt->bindValue(':title', $values['title']);
       $stmt->bindValue(':comment', $values['comment']);
       $stmt->execute();
@@ -54,10 +53,9 @@ class Thread extends \Board\Model
   {
     try {
       $this->db->beginTransaction();
-      $sql = "UPDATE threads SET user_name = :user_name, title = :title, comment = :comment, modified_at = now() WHERE id = :id";
+      $sql = "UPDATE threads SET title = :title, comment = :comment, modified_at = now() WHERE id = :id";
       $stmt = $this->db->prepare($sql);
       //名前付けされたプレースホルダを用いてプリペアドステートメントを実行
-      $stmt->bindValue(':user_name', $values['user_name']);
       $stmt->bindValue(':title', $values['title']);
       $stmt->bindValue(':comment', $values['comment']);
       $stmt->bindValue(':id', $values['id']);
@@ -83,6 +81,20 @@ class Thread extends \Board\Model
     } catch(Exception $e){
       echo $e->getMessage();
       $this->db->rollBack();
+    }
+  }
+
+  public function searchThread($values)
+  {
+    try {
+      $sql = "SELECT * FROM threads WHERE title LIKE :values or comment LIKE :values";
+      $stmt = $this->db->prepare($sql);
+      $stmt->bindValue(':values', "%" .$values. "%");
+      $stmt->execute();
+      return $stmt->fetchAll(\PDO::FETCH_OBJ);
+    } catch(\Exception $e){
+      echo $e->getMessage();
+      
     }
   }
 }

@@ -35,12 +35,13 @@ textarea {
   color: #d82626;
 }
 
-/* bbs style */
+
 .wrapper {
   max-width: 980px;
   margin: 50px auto;
 }
 
+/* ヘッダー */
 .header {
   background: rgba(245, 244, 244, 0.705);
 }
@@ -136,7 +137,7 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 40px;
+  margin-bottom: 30px;
 }
 
 .thread__ttl {
@@ -148,22 +149,21 @@ textarea {
 
 .thread__date {
   font-size: 15px;
+  margin-bottom: 0;
+  margin-left: auto;
 }
 
-.thread__body .comment__item {
+.comment__item {
+  display: flex;
+  flex-direction: column;
   margin-bottom: 30px;
-}
-
-.thread__body .comment__item__head {
-  font-size: 15px;
-  margin-bottom: 10px;
 }
 
 .thread__body .comment__item__name {
   color: #3c70e0;
   font-family: 'M PLUS Rounded 1c', sans-serif;
-  margin-right: 10px;
-  font-size: 15px;
+  margin: 0 10px 10px 0;
+  font-size: 20px;
   font-weight: bold;
 }
 
@@ -184,12 +184,15 @@ textarea {
 
 .thread__item .operation {
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
 .thread__item .operation a {
   font-size: 18px;
+}
+
+.thread__item .operation a:first-child{
+  margin-right: 20px;
 }
 
 .form {
@@ -203,16 +206,16 @@ textarea {
   margin-bottom: 10px;
 }
 
-.new_thread {
+.thread_form {
   width: 700px;
   margin: 0 auto;
 }
 
-.new_thread label {
+.thread_form label {
   margin-bottom: 5px;
 }
 
-.new_thread input {
+.thread_form input {
   padding: 20px 10px;
   font-size: 20px;
   margin-bottom: 30px;
@@ -293,15 +296,6 @@ textarea {
 .copy {
   text-align: center;
 }
-
-.fav__btn {
-  font-size: 20px;
-}
-
-.fav__btn.active {
-  color: #e8e826;
-}
-
 .form-search {
   display: flex;
 }
@@ -313,4 +307,59 @@ textarea {
   line-height: 30px;
   padding: 0;
   font-weight: bold;
+}
+
+/* レスポンシブ */
+
+@media screen and (max-width: 768px){
+  
+
+  /* ヘッダー */
+  .header__inner nav ul {
+    padding: 10px 0;
+  }
+  
+  .header__inner nav ul li {
+    font-size: 16px;
+  }
+
+  /* wrapper内*/
+  .wrapper {
+    margin:  20px;
+    max-width: 100%;
+  }
+
+  .page__ttl {
+    font-size: 30px;
+    margin-bottom: 30px;
+  }
+
+  .thread__head {
+    margin-bottom: 20px;
+  }
+
+  .thread__ttl {
+    font-size: 25px;
+  }
+  .thread__item {
+    padding: 15px;
+    margin-bottom: 30px;
+  }
+
+  .thread__item .operation a, .thread__body .comment__item__content  {
+    font-size: 10px;
+  }
+
+  .thread__date {
+    font-size: 8px;
+  }
+  .thread__body .comment__item__name {
+    font-size: 15px;
+}
+
+/* 新規スレッド、スレッド編集 */
+.thread_form {
+  width: 100%;
+  padding: 10px;
+}
 }
