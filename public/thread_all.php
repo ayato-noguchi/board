@@ -3,7 +3,7 @@ require_once(__DIR__ .'/header.php');
 require_once(__DIR__ .'/../Model/Thread.php');
 $threadModel = new Board\Model\Thread();
 $threads = $threadModel->getThreadAll();
-//var_dump($threads);
+// var_dump($_SESSION['me']);
 ?>
 <h1 class="page__ttl">スレッド一覧</h1>
 <ul class="thread">
@@ -20,14 +20,18 @@ $threads = $threadModel->getThreadAll();
         </li>
       </ul>
       <div class="operation">
+        <?php  if(isset($_SESSION['me']['id']) && $_SESSION['me']['id'] === $thread->user_id) {?>
         <a href="thread_update.php?id=<?= urldecode($thread->id); ?>">投稿編集</a>
         <a href="thread_delete.php?id=<?= urldecode($thread->id); ?>">投稿削除</a>
+        <?php } else { ?>
+
+        <?php }?>
         <?php
         $date = new DateTime($thread->created_at);
         $formatteDate = $date->format('Y年m月d日 H:i:s');
         ?>
         <p class="thread__date">スレッド作成日  <?= h($formatteDate); ?></p>
-        
+      </div>
     </li>
   <?php endforeach?>
 </ul>

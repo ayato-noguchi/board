@@ -77,23 +77,6 @@ textarea {
   display: flex;
 }
 
-.header__inner .prof-show {
-  display: flex;
-  align-items: center;
-}
-
-.header__inner .prof-show .name {
-  font-weight: bold;
-  color: #007bff;
-}
-
-.header__inner .prof-show .image img {
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  object-fit: cover;
-}
-
 .user-btn {
   display: flex;
   align-items: center;
@@ -111,6 +94,7 @@ textarea {
   text-decoration: underline;
 }
 
+/* コンテンツ内 */
 .page__ttl {
   font-size: 50px;
   letter-spacing: 5px;
@@ -129,7 +113,7 @@ textarea {
   margin-bottom: 50px;
 }
 
-.thread__item .comment-page.thread__date {
+.thread__item .thread__date {
   text-align: right;
 }
 
@@ -159,7 +143,7 @@ textarea {
   margin-bottom: 30px;
 }
 
-.thread__body .comment__item__name {
+.thread__body  {
   color: #3c70e0;
   font-family: 'M PLUS Rounded 1c', sans-serif;
   margin: 0 10px 10px 0;
@@ -221,41 +205,12 @@ textarea {
   margin-bottom: 30px;
 }
 
-.comment-confirm .guide {
-  font-size: 20px;
-}
-
-.comment-confirm .content {
-  margin: 50px 0;
-  font-size: 20px;
-  background: #fff;
-  padding: 10px;
-}
-
-.comment-confirm .form-group input[type="submit"] {
-  margin-top: 0;
-  margin-left: 10px;
-}
-
-.comment-complete {
-  font-size: 20px;
-}
-
-.comment-complete p {
-  margin-bottom: 20px;
-}
-
-.fs12 {
-  max-width: 600px;
-  margin: 20px auto 0;
-}
-
 .user-delete {
   text-align: right;
   margin-top: 100px;
 }
 
-.user-delete .btn {
+ .btn {
   width: 100px;
   font-size: 12px;
 }
@@ -265,55 +220,10 @@ textarea {
   justify-content: center;
 }
 
-.user-confirm a {
-  display: block;
-  margin-right: 40px;
-}
-
-.user-disp {
-  font-size: 16px;
-  margin-bottom: 50px;
-}
-
-.imgarea img {
-  border-radius: 50%;
-  width: 150px;
-  height: 150px;
-  object-fit: cover;
-}
-
-.imgarea:empty {
-  width: 0;
-  height: 0;
-}
-
-.file-btn {
-  width: 180px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.copy {
-  text-align: center;
-}
-.form-search {
-  display: flex;
-}
-
-.form-search input[type=submit] {
-  width: 100px;
-  height: 30px;
-  font-size: 15px;
-  line-height: 30px;
-  padding: 0;
-  font-weight: bold;
-}
-
 /* レスポンシブ */
 
 @media screen and (max-width: 768px){
   
-
   /* ヘッダー */
   .header__inner nav ul {
     padding: 10px 0;
@@ -357,9 +267,8 @@ textarea {
     font-size: 15px;
 }
 
-/* 新規スレッド、スレッド編集 */
-.thread_form {
-  width: 100%;
-  padding: 10px;
-}
+  .thread_form {
+    width: 100%;
+    padding: 10px;
+  }
 }
