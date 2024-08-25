@@ -13,18 +13,18 @@ let isFormValid = false;
   
       //タイトルのバリデーション
       if(title.length > 100 ){
-        form.querySelector('#err2').innerHTML = 'タイトルを100文字以下で入力してください';
+        form.querySelector('#err1').innerHTML = 'タイトルを100文字以下で入力してください';
         isFormValid = false;
       } else {
-        form.querySelector('#err2').innerHTML = '';
+        form.querySelector('#err1').innerHTML = '';
       }
   
       //コメントのバリデーション
       if(comment.length > 200 ){
-        form.querySelector('#err3').innerHTML = 'コメントを200文字以下で入力してください';
+        form.querySelector('#err2').innerHTML = 'コメントを200文字以下で入力してください';
         isFormValid = false;
       } else {
-        form.querySelector('#err3').innerHTML = '';
+        form.querySelector('#err2').innerHTML = '';
       }
   
       //バリデーションでエラーがある場合、フォームの送信を防ぐ
