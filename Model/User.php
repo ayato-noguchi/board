@@ -24,7 +24,7 @@ class User extends \Board\Model
 
       $sql = "INSERT INTO users (name,email,password)VALUES (:name,:email,:password)";
       $stmt = $this->db->prepare($sql);
-      //名前付けされたプレースホルダを用いてプリペアドステートメントを実行
+     
       $stmt->bindValue(':name', $values['name']);
       $stmt->bindValue(':email', $values['email']);
       $stmt->bindValue(':password', $hashedPassword);
@@ -47,6 +47,29 @@ class User extends \Board\Model
       $stmt->execute();
 
       return $stmt->fetchColumn() > 0;
+  }
+
+  public function login($values)
+  {
+
+       $stmt = $this->db->prepare("SELECT * FROM users WHERE email = :email;");
+       $stmt->execute([
+         ':email' => $values['email']
+       ]);
+       $stmt->setFetchMode(\PDO::FETCH_CLASS, User::class);
+       $user = $stmt->fetch();
+      
+       // ユーザーが見つからない場合の例外処理
+       if (empty($user)) {
+         throw new Exception('ユーザーが見つかりません。');
+       }
+   
+       // password_verifyは、ハッシュ化（暗号化）されているパスワードを判定する
+       if (!password_verify($values['password'], $user->password)) {
+         throw new Exception('パスワードが正しくありません。');
+       }
+   
+       return $user;
   }
 }
 

@@ -1,5 +1,6 @@
 <?php
 require_once(__DIR__ . '/../config/config.php');
+require_once(__DIR__ .'/../Controller/Login.php');
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -23,8 +24,7 @@ require_once(__DIR__ . '/../config/config.php');
       <nav>
         <ul>
           <li><a href="<?= SITE_URL; ?>/">ホーム</a></li>
-          <?php
-          if (isset($_SESSION['me'])) { ?>
+          <?php if (isset($_SESSION['me'])) { ?>
             <li><a href="<?= SITE_URL; ?>/thread_all.php">一覧</a></li>
             <li><a href="<?= SITE_URL; ?>/thread_create.php">新規投稿</a></li>
           <?php } else { ?>

@@ -19,7 +19,7 @@ class Controller
       throw new \Exception('無効なトークンです。');
     }
   }
-
+// sessionが空でないか、ログイン確認
   protected function isLoggedIn()
   {
     return isset($_SESSION['me']) && !empty($_SESSION['me']);

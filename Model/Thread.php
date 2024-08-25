@@ -10,14 +10,15 @@ class Thread extends \Board\Model
 {
   public function createThread($values)
   {
-    // var_dump($values);
+
     try {
       $this->db->beginTransaction();
-      $sql = "INSERT INTO threads (title,comment,created_at,modified_at)VALUES (:title,:comment,now(),now())";
+      $sql = "INSERT INTO threads (title,comment,user_id,created_at,modified_at)VALUES (:title,:comment,:user_id,now(),now())";
       $stmt = $this->db->prepare($sql);
       //名前付けされたプレースホルダを用いてプリペアドステートメントを実行
       $stmt->bindValue(':title', $values['title']);
       $stmt->bindValue(':comment', $values['comment']);
+      $stmt->bindValue(':user_id', $values['user_id']);
       $stmt->execute();
       $this->db->commit();
     } catch(Exception $e){
@@ -53,12 +54,13 @@ class Thread extends \Board\Model
   {
     try {
       $this->db->beginTransaction();
-      $sql = "UPDATE threads SET title = :title, comment = :comment, modified_at = now() WHERE id = :id";
+      $sql = "UPDATE threads SET title = :title, comment = :comment, modified_at = now() WHERE id = :id AND user_id = :user_id";
       $stmt = $this->db->prepare($sql);
-      //名前付けされたプレースホルダを用いてプリペアドステートメントを実行
+      
       $stmt->bindValue(':title', $values['title']);
       $stmt->bindValue(':comment', $values['comment']);
       $stmt->bindValue(':id', $values['id']);
+      $stmt->bindValue(':user_id', $values['user_id']);
       $stmt->execute();
       $this->db->commit();
     } catch(Exception $e){
@@ -73,7 +75,7 @@ class Thread extends \Board\Model
       $this->db->beginTransaction();
       $sql = "DELETE FROM threads WHERE id = :id";
       $stmt = $this->db->prepare($sql);
-      //名前付けされたプレースホルダを用いてプリペアドステートメントを実行
+
       $stmt->bindValue(':id', (int)$id);
       $stmt->execute();
       $this->db->commit();
@@ -92,7 +94,7 @@ class Thread extends \Board\Model
       $stmt->bindValue(':values', "%" .$values. "%");
       $stmt->execute();
       return $stmt->fetchAll(\PDO::FETCH_OBJ);
-    } catch(\Exception $e){
+    } catch(Exception $e){
       echo $e->getMessage();
       
     }

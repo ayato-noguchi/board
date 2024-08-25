@@ -1,6 +1,6 @@
 document.querySelector('.thread_form').addEventListener('submit', function(event) {
   event.preventDefault(); 
-console.log(isFormValid);
+  console.log(isFormValid);
 
   if (isFormValid) { 
     $.ajax({

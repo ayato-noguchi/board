@@ -22,4 +22,4 @@ $app->run();
   <button type="submit" class="btn btn-primary" id="send" >作成</button>
 </form>
 <script src="./js/validation.js"></script>
-<script src="./js/send.js"></script>
+<!-- <script src="./js/send.js"></script> -->

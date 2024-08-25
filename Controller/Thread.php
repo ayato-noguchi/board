@@ -40,11 +40,12 @@ class Thread  extends \Board\Controller
     $this->validateToken();
 
     $threadModel = new \Board\Model\Thread();
-
+// var_dump($_SESSION['me']);
+// exit;
     $threadModel->createThread([
-      'user_name' => $_POST['user_name'],
       'title' => $_POST['title'],
       'comment' => $_POST['comment'],
+      'user_id' => $_SESSION['me']['id']
     ]);
 
     // $response = array(
@@ -55,7 +56,7 @@ class Thread  extends \Board\Controller
     // header("Content-type: application/json; charset=UTF-8");
    
     // echo json_encode($response);
-
+    header('Location: thread_all.php');
     exit;
   }
 
@@ -67,6 +68,7 @@ class Thread  extends \Board\Controller
       'title' => $_POST['title'],
       'comment' => $_POST['comment'],
       'id' => $_POST['id'],
+      'user_id' => $_SESSION['me']['id']
     ]);
 
     header('Location: thread_all.php');
