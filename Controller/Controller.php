@@ -12,7 +12,7 @@ class Controller
       $_SESSION['token'] = bin2hex(random_bytes(16));
     }
   }
-//XSS対策
+//CSRF対策
   protected function  validateToken()
   {
     if(!isset($_POST['token']) || $_POST['token'] !== $_SESSION['token']){

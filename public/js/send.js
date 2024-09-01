@@ -1,12 +1,12 @@
 document.querySelector('.thread_form').addEventListener('submit', function(event) {
-  event.preventDefault(); 
-  console.log(isFormValid);
+  // event.preventDefault(); 
+
 
   if (isFormValid) { 
     $.ajax({
       url: '../Controller/Thread.php',
       type: 'POST',
-      dataType: 'text',
+      
       data: {
         title: $('#title').val(),
         comment: $('#comment').val(),

@@ -13,7 +13,7 @@ class Thread  extends \Board\Controller
  
     if($_SERVER['REQUEST_METHOD'] === 'POST')
     {
- 
+
       if($_POST['type'] === 'createthread')
       {
         $this->createThread();
@@ -51,22 +51,21 @@ class Thread  extends \Board\Controller
     $this->validateToken();
 
     $threadModel = new \Board\Model\Thread();
-// var_dump($_SESSION['me']);
-// exit;
+
     $threadModel->createThread([
       'title' => $_POST['title'],
       'comment' => $_POST['comment'],
       'user_id' => $_SESSION['me']['id']
     ]);
 
-    // $response = array(
-    //   "status" => "success",
-    //   "message" => "スレッドが作成されました"
-    // );
+    $response = array(
+      "status" => "success",
+      "message" => "スレッドが作成されました"
+    );
 
-    // header("Content-type: application/json; charset=UTF-8");
+    header("Content-type: application/json; charset=UTF-8");
    
-    // echo json_encode($response);
+    echo json_encode($response);
     header('Location: thread_all.php');
     exit;
   }
@@ -74,7 +73,7 @@ class Thread  extends \Board\Controller
   protected function updateThread()
   {
     $this->validateToken();
-    
+
     $threadModel = new \Board\Model\Thread();
 
     $threadModel->updateThread([
@@ -91,7 +90,7 @@ class Thread  extends \Board\Controller
   protected function deleteThread()
   {
     $this->validateToken();
-
+ 
     $threadModel = new \Board\Model\Thread();
     // var_dump($_POST['id']);
     $threadModel->deleteThread($_POST['id']);
