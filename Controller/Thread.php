@@ -9,9 +9,11 @@ class Thread  extends \Board\Controller
 {
   public function run()
   {
-    //var_dump($_SESSION['token']);
+
+ 
     if($_SERVER['REQUEST_METHOD'] === 'POST')
     {
+ 
       if($_POST['type'] === 'createthread')
       {
         $this->createThread();
@@ -30,6 +32,15 @@ class Thread  extends \Board\Controller
       if($_POST['type'] === 'search_thread')
       {
         $this->searchThread();
+      }
+    }
+
+    if($_SERVER['REQUEST_METHOD'] === 'GET')
+    {
+      if(isset($_GET['action']) && $_GET['action'] === 'thread_all')
+      {
+    
+        $this->threadAll();
       }
     }
   }
@@ -62,6 +73,8 @@ class Thread  extends \Board\Controller
 
   protected function updateThread()
   {
+    $this->validateToken();
+    
     $threadModel = new \Board\Model\Thread();
 
     $threadModel->updateThread([
@@ -84,6 +97,34 @@ class Thread  extends \Board\Controller
     $threadModel->deleteThread($_POST['id']);
     
     header('Location: thread_all.php');
+    exit;
+  }
+
+  protected function threadAll()
+  {
+    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    $perPage = 5; 
+    // ページ番号に基づいてデータの開始位置を計算
+    $offset = ($page - 1) * $perPage;
+
+    $threadModel = new \Board\Model\Thread();
+
+    // オフセットとページ当たりのアイテム数を指定して取得
+    $threads = $threadModel->getThreadAll($offset, $perPage);
+    
+    // 投稿の総数
+    $totalThreads = $threadModel->getThreadCount();
+  
+    // 総ページを計算
+    $totalPages = ceil($totalThreads / $perPage);
+  
+    $_SESSION['threads'] = $threads;
+    $_SESSION['total_pages'] = $totalPages;
+    $_SESSION['current_page'] = $page;
+    // var_dump($_SESSION);
+    // exit;
+    header('Location: thread_all.php');
+
     exit;
   }
 

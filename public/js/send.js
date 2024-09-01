@@ -6,13 +6,14 @@ document.querySelector('.thread_form').addEventListener('submit', function(event
     $.ajax({
       url: '../Controller/Thread.php',
       type: 'POST',
+      dataType: 'text',
       data: {
         title: $('#title').val(),
         comment: $('#comment').val(),
         token: $('input[name="token"]').val(), 
         type: 'createthread'
-      },
-      dataType: 'text'
+      }
+      
     }).done(function(data) {
       console.log('成功', data);
       alert('成功');

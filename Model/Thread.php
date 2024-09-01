@@ -27,16 +27,27 @@ class Thread extends \Board\Model
     }
   }
 
-  public function getThreadAll()
+  public function getThreadAll($offset, $perPage)
   {
-    try{
-      $sql = $this->db->query('SELECT * FROM threads');
+      try {
+          $sql = $this->db->prepare('SELECT * FROM threads ORDER BY created_at DESC LIMIT :offset, :perPage');
+          $sql->bindValue(':offset', $offset, \PDO::PARAM_INT);
+          $sql->bindValue(':perPage', $perPage, \PDO::PARAM_INT);
+          $sql->execute();
       return $sql->fetchAll(\PDO::FETCH_OBJ);
     } catch(Exception $e){
       echo $e->getMessage();
     }
   }
-
+  public function getThreadCount()
+  {
+      try {
+          $sql = $this->db->query('SELECT COUNT(*) FROM threads');
+          return $sql->fetchColumn();
+      } catch (Exception $e) {
+          echo $e->getMessage();
+      }
+  }
   public function getThreadId($id)
   {
     try{
@@ -88,10 +99,11 @@ class Thread extends \Board\Model
 
   public function searchThread($values)
   {
+    
     try {
-      $sql = "SELECT * FROM threads WHERE title LIKE :values or comment LIKE :values";
-      $stmt = $this->db->prepare($sql);
-      $stmt->bindValue(':values', "%" .$values. "%");
+      $sql = "SELECT * FROM threads WHERE title LIKE :values OR comment LIKE :values";
+        $stmt = $this->db->prepare($sql);
+        $stmt->bindValue(':values', "%" .$values. "%", \PDO::PARAM_STR);
       $stmt->execute();
       return $stmt->fetchAll(\PDO::FETCH_OBJ);
     } catch(Exception $e){
@@ -99,4 +111,5 @@ class Thread extends \Board\Model
       
     }
   }
+
 }
