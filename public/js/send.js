@@ -1,5 +1,6 @@
-document.querySelector('.thread_form').addEventListener('submit', function(event) {
-  // event.preventDefault(); 
+document.querySelector('.thread_form').addEventListener('submit', function() {
+  //下記の記述をコメントアウトしたらエラー解消
+  //  event.preventDefault(); 
 
 
   if (isFormValid) { 

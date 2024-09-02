@@ -16,16 +16,17 @@ $thread = $threadModel->getThreadId($id);
   <input type="hidden" name="id" value="<?= h($thread->id); ?>">
   <div class="form-group">
     <label>タイトル</label>
-    <input type="text" name="title" class="form-control" value="<?= isset($_POST['title']) ? h($_POST['title']) : h($thread->title); ?>">
+    <input type="text" name="title" id="title" class="form-control" value="<?= isset($_POST['title']) ? h($_POST['title']) : h($thread->title); ?>">
     <p id="err2" class="err"></p>
   </div>
   <div class="form-group">
     <label>コメント</label>
-    <textarea type="text" name="comment" class="form-control"><?= isset($_POST['comment']) ? h($_POST['comment']) : h($thread->comment); ?></textarea>
-    <input type="hidden" name="token" value="<?= h($_SESSION['token']) ; ?>">
+    <textarea type="text" name="comment" id="comment" class="form-control"><?= isset($_POST['comment']) ? h($_POST['comment']) : h($thread->comment); ?></textarea>
+    <input type="hidden" name="token"  value="<?= h($_SESSION['token']) ; ?>">
     <input type="hidden" name="type" value="update_thread">
     <p id="err3" class="err"></p>
   </div>
   <button type="submit" class="btn btn-primary">更新</button>
 </form>
 <script src="./js/validation.js"></script>
+<script src="./js/send.js"></script>

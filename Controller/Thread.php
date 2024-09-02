@@ -9,40 +9,46 @@ class Thread  extends \Board\Controller
 {
   public function run()
   {
-
- 
-    if($_SERVER['REQUEST_METHOD'] === 'POST')
-    {
-
-      if($_POST['type'] === 'createthread')
-      {
-        $this->createThread();
-      } 
-      
-      if ($_POST['type'] === 'update_thread')
-      {
-        $this->updateThread();
-      } 
-
-      if($_POST['type'] === 'delete_thread')
-      {
-        $this->deleteThread();
-      }
-
-      if($_POST['type'] === 'search_thread')
-      {
-        $this->searchThread();
-      }
-    }
-
-    if($_SERVER['REQUEST_METHOD'] === 'GET')
-    {
-      if(isset($_GET['action']) && $_GET['action'] === 'thread_all')
-      {
     
-        $this->threadAll();
+    if($this->isLoggedIn()){
+      if($_SERVER['REQUEST_METHOD'] === 'POST')
+      {
+  
+        if($_POST['type'] === 'createthread')
+        {
+          $this->createThread();
+        } 
+        
+        if ($_POST['type'] === 'update_thread')
+        {
+          $this->updateThread();
+        } 
+  
+        if($_POST['type'] === 'delete_thread')
+        {
+          $this->deleteThread();
+        }
+  
+        if($_POST['type'] === 'search_thread')
+        {
+          $this->searchThread();
+        }
       }
+  
+      if($_SERVER['REQUEST_METHOD'] === 'GET')
+      {
+        if(isset($_GET['action']) && $_GET['action'] === 'thread_all')
+        {
+      
+          $this->threadAll();
+        }
+      }
+    }else{
+      header('Location: signup.php' );
+      exit();
     }
+ 
+
   }
 
 
@@ -140,6 +146,8 @@ class Thread  extends \Board\Controller
 
      exit;
   }
+
+  
 }
 
 ?>

@@ -43,7 +43,7 @@ class Login  extends \Board\Controller
             'email' => $user->email
         ];
 
-          header('Location: thread_all.php');
+          header('Location: thread_all.php?action=thread_all');
           exit();
         
       } catch (Exception $e){

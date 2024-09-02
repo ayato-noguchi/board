@@ -15,7 +15,7 @@ $app->run();
   <div class="form-group">
     <label>コメント</label>
     <textarea type="text" name="comment" id="comment" class="form-control"><?= isset($_POST['comment']) ? h($_POST['comment']) : ''; ?></textarea>
-    <input type="hidden" name="token" id="token" value="<?= h($_SESSION['token']) ; ?>">
+    <input type="hidden" name="token" value="<?= h($_SESSION['token']) ; ?>">
     <input type="hidden" name="type" value="createthread">
     <p id="err2" class="err"></p>
   </div>

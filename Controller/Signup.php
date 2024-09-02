@@ -33,7 +33,8 @@ class Signup  extends \Board\Controller
         // ユーザー作成後にログイン
           session_regenerate_id(true);
           $_SESSION['me'] = $user;
-          header('Location: thread_all.php');
+          
+          header('Location: thread_all.php?action=thread_all');
           exit();
         
       } catch (Exception $e){

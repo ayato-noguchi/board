@@ -23,7 +23,7 @@ require_once(__DIR__ .'/../Controller/Login.php');
     <div class="header__inner">
       <nav>
         <ul>
-          <li><a href="<?= SITE_URL; ?>/">ホーム</a></li>
+          <li><a href="">ホーム</a></li>
           <?php if (isset($_SESSION['me'])) { ?>
             <li><a href="<?= SITE_URL; ?>/thread_all.php?action=thread_all">一覧</a></li>
             <li><a href="<?= SITE_URL; ?>/thread_create.php">新規投稿</a></li>
