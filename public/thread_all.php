@@ -26,6 +26,11 @@ $current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 1
         <li class="comment__item">
             <span class="comment__item__content"><?= h($thread->comment); ?></span>
         </li>
+        <?php if(isset($thread->image)): ?>
+        <li class="comment__item">
+          <img src="uploads/<?= ($thread->image); ?>" width="200" height="200">
+        </li>
+        <?php endif; ?>
       </ul>
       <div class="operation">
         <?php  if(isset($_SESSION['me']['id']) && $_SESSION['me']['id'] === $thread->user_id) {?>

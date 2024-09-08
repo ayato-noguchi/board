@@ -10,15 +10,15 @@ class Thread extends \Board\Model
 {
   public function createThread($values)
   {
-
     try {
       $this->db->beginTransaction();
-      $sql = "INSERT INTO threads (title,comment,user_id,created_at,modified_at)VALUES (:title,:comment,:user_id,now(),now())";
+      $sql = "INSERT INTO threads (title,comment,image,user_id,created_at,modified_at)VALUES (:title,:comment,:image,:user_id,now(),now())";
       $stmt = $this->db->prepare($sql);
       //名前付けされたプレースホルダを用いてプリペアドステートメントを実行
       $stmt->bindValue(':title', $values['title']);
       $stmt->bindValue(':comment', $values['comment']);
       $stmt->bindValue(':user_id', $values['user_id']);
+      $stmt->bindValue(':image', $values['image']);
       $stmt->execute();
       $this->db->commit();
     } catch(Exception $e){
