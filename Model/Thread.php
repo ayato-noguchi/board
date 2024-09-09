@@ -29,12 +29,12 @@ class Thread extends \Board\Model
 
   public function getThreadAll($offset, $perPage)
   {
-      try {
-          $sql = $this->db->prepare('SELECT * FROM threads ORDER BY created_at DESC LIMIT :offset, :perPage');
-          $sql->bindValue(':offset', $offset, \PDO::PARAM_INT);
-          $sql->bindValue(':perPage', $perPage, \PDO::PARAM_INT);
-          $sql->execute();
-      return $sql->fetchAll(\PDO::FETCH_OBJ);
+    try {
+        $sql = $this->db->prepare('SELECT * FROM threads ORDER BY created_at DESC LIMIT :offset, :perPage');
+        $sql->bindValue(':offset', $offset, \PDO::PARAM_INT);
+        $sql->bindValue(':perPage', $perPage, \PDO::PARAM_INT);
+        $sql->execute();
+        return $sql->fetchAll(\PDO::FETCH_OBJ);
     } catch(Exception $e){
       echo $e->getMessage();
     }
@@ -65,11 +65,12 @@ class Thread extends \Board\Model
   {
     try {
       $this->db->beginTransaction();
-      $sql = "UPDATE threads SET title = :title, comment = :comment, modified_at = now() WHERE id = :id AND user_id = :user_id";
+      $sql = "UPDATE threads SET title = :title, comment = :comment, image = :image, modified_at = now() WHERE id = :id AND user_id = :user_id";
       $stmt = $this->db->prepare($sql);
       
       $stmt->bindValue(':title', $values['title']);
       $stmt->bindValue(':comment', $values['comment']);
+      $stmt->bindValue(':image', $values['image']);
       $stmt->bindValue(':id', $values['id']);
       $stmt->bindValue(':user_id', $values['user_id']);
       $stmt->execute();

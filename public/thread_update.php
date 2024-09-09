@@ -17,12 +17,17 @@ $thread = $threadModel->getThreadId($id);
   <div class="form-group">
     <label>タイトル</label>
     <input type="text" name="title" id="title" class="form-control" value="<?= isset($_POST['title']) ? h($_POST['title']) : h($thread->title); ?>">
-    <p id="err2" class="err"></p>
+    <p id="err1" class="err"></p>
   </div>
   <div class="form-group">
     <label>コメント</label>
     <textarea type="text" name="comment" id="comment" class="form-control"><?= isset($_POST['comment']) ? h($_POST['comment']) : h($thread->comment); ?></textarea>
-    <input type="hidden" name="token"  value="<?= h($_SESSION['token']) ; ?>">
+    <p id="err2" class="err"></p>
+  </div>
+  <div class="form-group">
+    <label>画像</label>
+    <input type="file" name="image" id="image" class="form-control">
+    <input type="hidden" name="token" value="<?= h($_SESSION['token']) ; ?>">
     <input type="hidden" name="type" value="update_thread">
     <p id="err3" class="err"></p>
   </div>

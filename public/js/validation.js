@@ -5,6 +5,7 @@ let isFormValid = false;
 
       let title = form.querySelector('#title').value;
       let comment = form.querySelector('#comment').value;
+      let image = form.querySelector('#image').files[0];
       isFormValid = true;
 
       console.log('title', title);
@@ -25,6 +26,14 @@ let isFormValid = false;
         isFormValid = false;
       } else {
         form.querySelector('#err2').innerHTML = '';
+      }
+
+      //画像のバリデーション
+      if(image) {
+        form.querySelector('#err2').innerHTML = 'コメントを200文字以下で入力してください';
+        isFormValid = false;
+      } else {
+      form.querySelector('#err2').innerHTML = '';
       }
   
       //バリデーションでエラーがある場合、フォームの送信を防ぐ

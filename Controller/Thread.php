@@ -5,6 +5,7 @@ use Exception;
 
 require_once(__DIR__ . '/../Model/Thread.php');
 require_once(__DIR__ . '/../Controller/Controller.php');
+require_once(__DIR__ . '/../Controller/Image_upload.php');
 
 class Thread  extends \Board\Controller
 {
@@ -46,39 +47,18 @@ class Thread  extends \Board\Controller
   {
    try{
     $this->validateToken();
-   } catch(Exception $e) {
+  } catch(Exception $e) {
     $e->getMessage();
+    return;
    }
-    
-    $temp_file = null; 
-    $image = null; 
-    if(isset($_FILES)) {
-      $temp_file = $_FILES['image']['tmp_name'];
-      $dir = __DIR__ . '/../public/uploads/';
-    } 
- 
-    if(file_exists($temp_file)) { //画像が存在するかチェック
-      $image = uniqid(mt_rand(), false); //ファイル名をユニーク化
-      switch(@exif_imagetype($temp_file)) { //画像ファイルかチェック
-        case IMAGETYPE_GIF:
-          $image .= '.gif';
-          break;
-        case IMAGETYPE_JPEG:
-          $image .= '.jpg';
-          break;
-         case IMAGETYPE_PNG:
-          $image .= '.png';
-          break;
-          default:
-           echo '拡張子を変更してください。';   
-           return;
-      }
-          // アップロードされたファイルを保存
-          if (!move_uploaded_file($temp_file, $dir . $image)) {
-            echo "ファイルのアップロードに失敗しました。";
-            return;
-        }
+   try {
+    if(isset($_FILES)){
+      $image = Image_uploade::upload($_FILES['image']);
     }
+  } catch (Exception $e) {
+      echo $e->getMessage();
+      return;
+  }
 
     $threadModel = new \Board\Model\Thread();
 
@@ -89,29 +69,48 @@ class Thread  extends \Board\Controller
       'image' => $image
     ]);
 
-    // $response = array(
-    //   "status" => "success",
-    //   "message" => "スレッドが作成されました"
-    // );
+    $response = array(
+      "status" => "success",
+      "message" => "スレッドが作成されました"
+    );
 
-    // header("Content-type: application/json; charset=UTF-8");
+    header("Content-type: application/json; charset=UTF-8");
 
-    // echo json_encode($response);
+    echo json_encode($response);
     header('Location: thread_all.php');
     exit;
   }
 
   protected function updateThread()
   {
-    $this->validateToken();
+    try{
+      $this->validateToken();
+     } catch(Exception $e) {
+      $e->getMessage();
+      return;
+     }
 
     $threadModel = new \Board\Model\Thread();
 
+    $current_image = $threadModel->getThreadId($_POST['id']);
+    
+ 
+    $dir = __DIR__ . '/../public/uploads/'; 
+
+     // 既存の画像がある場合、削除する
+      if (!empty($current_image->image) && file_exists($dir . $current_image->image)) {
+          unlink($dir . $current_image->image); // 既存ファイルを削除
+      }
+      // 新しい画像をアップロード
+      $image = Image_uploade::upload($_FILES['image']);
+    
+      
     $threadModel->updateThread([
       'title' => $_POST['title'],
       'comment' => $_POST['comment'],
       'id' => $_POST['id'],
-      'user_id' => $_SESSION['me']['id']
+      'user_id' => $_SESSION['me']['id'],
+      'image' => $image
     ]);
 
     header('Location: thread_all.php');
@@ -120,7 +119,12 @@ class Thread  extends \Board\Controller
 
   protected function deleteThread()
   {
-    $this->validateToken();
+    try{
+      $this->validateToken();
+    } catch(Exception $e){
+      $e->getMessage();
+    }
+
 
     $threadModel = new \Board\Model\Thread();
    
