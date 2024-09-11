@@ -45,20 +45,21 @@ class Thread  extends \Board\Controller
 
   protected function createThread()
   {
-   try{
-    $this->validateToken();
-  } catch(Exception $e) {
-    $e->getMessage();
-    return;
-   }
-   try {
-    if(isset($_FILES)){
-      $image = Image_uploade::upload($_FILES['image']);
-    }
-  } catch (Exception $e) {
-      echo $e->getMessage();
+    try{
+      if(empty($_POST)){
+       throw new Exception('フォームが送信されていません。');
+      }
+      $this->validateToken();
+     } catch (Exception $e) {
+      $e->getMessage();
       return;
-  }
+     }
+   
+    if(isset($_FILES['image']) && !empty($_FILES['image']['name'])){
+      $image = Image_uploade::upload($_FILES['image']);
+    } else {
+      $image = null;
+    }
 
     $threadModel = new \Board\Model\Thread();
 
@@ -83,27 +84,29 @@ class Thread  extends \Board\Controller
 
   protected function updateThread()
   {
+    
     try{
+      if(empty($_POST)){
+       throw new Exception('フォームが送信されていません。');
+      }
       $this->validateToken();
-     } catch(Exception $e) {
+     } catch (Exception $e) {
       $e->getMessage();
       return;
      }
-
+     
     $threadModel = new \Board\Model\Thread();
 
     $current_image = $threadModel->getThreadId($_POST['id']);
-    
- 
     $dir = __DIR__ . '/../public/uploads/'; 
 
-     // 既存の画像がある場合、削除する
-      if (!empty($current_image->image) && file_exists($dir . $current_image->image)) {
-          unlink($dir . $current_image->image); // 既存ファイルを削除
+    // 既存の画像がある場合、削除する
+    if (!empty($current_image->image) && file_exists($dir . $current_image->image)) {
+        unlink($dir . $current_image->image); // 既存ファイルを削除
       }
+      
       // 新しい画像をアップロード
-      $image = Image_uploade::upload($_FILES['image']);
-    
+    $image = Image_uploade::upload($_FILES['image']);
       
     $threadModel->updateThread([
       'title' => $_POST['title'],
@@ -124,13 +127,11 @@ class Thread  extends \Board\Controller
     } catch(Exception $e){
       $e->getMessage();
     }
-
-
     $threadModel = new \Board\Model\Thread();
    
     $threadModel->deleteThread($_POST['id']);
 
-    header('Location: thread_all.php');
+    header('Location: /BOARD/public/thread_all.php?action=thread_all');
     exit;
   }
 
@@ -155,8 +156,7 @@ class Thread  extends \Board\Controller
     $_SESSION['threads'] = $threads;
     $_SESSION['total_pages'] = $totalPages;
     $_SESSION['current_page'] = $page;
-    // var_dump($_SESSION);
-    // exit;
+ 
     header('Location: thread_all.php');
 
     exit;
@@ -168,7 +168,7 @@ class Thread  extends \Board\Controller
     $threadModel = new \Board\Model\Thread();
 
     $searchResult = $threadModel->searchThread($_POST['search']);
-    //var_dump($searchResult);
+    
     $_SESSION['search_result'] = $searchResult;
 
     header('Location: thread_result.php');

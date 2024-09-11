@@ -40,7 +40,7 @@ $current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 1
 
         <?php }?>
         <?php
-        $date = new DateTime($thread->created_at);
+        $date = new DateTime($thread->modified_at);
         $formatteDate = $date->format('Y年m月d日 H:i:s');
         ?>
         <p class="thread__date">スレッド作成日  <?= h($formatteDate); ?></p>

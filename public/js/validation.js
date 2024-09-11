@@ -1,44 +1,42 @@
-let isFormValid = false;
+let form = document.querySelector('.thread_form');
+let isFormValid = true;
 
-  document.querySelectorAll('.thread_form').forEach(function(form){
-    form.addEventListener('submit', function(event){
+form.addEventListener('submit', function(event) {
+  let title = form.querySelector('#title').value;
+  let comment = form.querySelector('#comment').value;
+  let image = form.querySelector('#image').files[0]; // 画像ファイルを取得
+  isFormValid = true;
 
-      let title = form.querySelector('#title').value;
-      let comment = form.querySelector('#comment').value;
-      let image = form.querySelector('#image').files[0];
-      isFormValid = true;
+  // タイトルのバリデーション
+  if (title.length > 100) {
+    form.querySelector('#err1').innerHTML = 'タイトルを100文字以下で入力してください';
+    isFormValid = false;
+  } else {
+    form.querySelector('#err1').innerHTML = '';
+  }
 
-      console.log('title', title);
-      console.log('comment', comment);
-  
-  
-      //タイトルのバリデーション
-      if(title.length > 100 ){
-        form.querySelector('#err1').innerHTML = 'タイトルを100文字以下で入力してください';
-        isFormValid = false;
-      } else {
-        form.querySelector('#err1').innerHTML = '';
-      }
-  
-      //コメントのバリデーション
-      if(comment.length > 200 ){
-        form.querySelector('#err2').innerHTML = 'コメントを200文字以下で入力してください';
-        isFormValid = false;
-      } else {
-        form.querySelector('#err2').innerHTML = '';
-      }
+  // コメントのバリデーション
+  if (comment.length > 200) {
+    form.querySelector('#err2').innerHTML = 'コメントを200文字以下で入力してください';
+    isFormValid = false;
+  } else {
+    form.querySelector('#err2').innerHTML = '';
+  }
 
-      //画像のバリデーション
-      if(image) {
-        form.querySelector('#err2').innerHTML = 'コメントを200文字以下で入力してください';
-        isFormValid = false;
-      } else {
-      form.querySelector('#err2').innerHTML = '';
-      }
-  
-      //バリデーションでエラーがある場合、フォームの送信を防ぐ
-      if(!isFormValid){
-        event.preventDefault();
-      }
-  });
+  // 画像のバリデーション（画像が選択されている場合のみチェック）
+  if (image) {
+    if (image.size > 2 * 1024 * 1024) { // 2MBを超えるかどうかをチェック
+      form.querySelector('#err3').innerHTML = '画像は2MB以下でアップロードしてください';
+      isFormValid = false;
+    } else {
+      form.querySelector('#err3').innerHTML = ''; // エラーなし
+    }
+  } else {
+    form.querySelector('#err3').innerHTML = ''; // 画像が選択されていない場合、エラーなし
+  }
+
+  // バリデーションエラーがあれば送信を防ぐ
+  if (!isFormValid) {
+    event.preventDefault();
+  }
 });
