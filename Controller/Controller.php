@@ -24,8 +24,6 @@ class Controller
   {
     return isset($_SESSION['me']) && !empty($_SESSION['me']);
   }
-
-
 }
 
 ?>
