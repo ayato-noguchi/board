@@ -6,7 +6,6 @@ class Image_uploade
 {
     public static function upload($file)
   {
-    
       $temp_file = $file['tmp_name']; 
       $image = null; 
       $dir = __DIR__ . '/../public/uploads/';
