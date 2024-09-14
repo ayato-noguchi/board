@@ -2,10 +2,19 @@ let form = document.querySelector('.thread_form');
 let isFormValid = true;
 
 form.addEventListener('submit', function(event) {
-  let title = form.querySelector('#title').value;
-  let comment = form.querySelector('#comment').value;
+  let title = form.querySelector('#title').value.trim();
+  let comment = form.querySelector('#comment').value.trim();
   let image = form.querySelector('#image').files[0]; // 画像ファイルを取得
   isFormValid = true;
+
+  
+  //全ての入力が空かどうか
+  if(!title && !comment && !image) {
+    form.querySelector('#errors').innerHTML = 'タイトル、コメント、画像のいずれかを入力してください。';
+    isFormValid = false;
+  } else {
+    form.querySelector('#errors').innerHTML = '';
+  }
 
   // タイトルのバリデーション
   if (title.length > 100) {

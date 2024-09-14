@@ -84,7 +84,6 @@ class Thread  extends \Board\Controller
 
   protected function updateThread()
   {
-    
     try{
       if(empty($_POST)){
        throw new Exception('フォームが送信されていません。');
@@ -105,7 +104,7 @@ class Thread  extends \Board\Controller
         unlink($dir . $current_image->image); // 既存ファイルを削除
       }
       
-      // 新しい画像をアップロード
+    // 新しい画像をアップロード
     $image = Image_uploade::upload($_FILES['image']);
       
     $threadModel->updateThread([
@@ -127,10 +126,14 @@ class Thread  extends \Board\Controller
     } catch(Exception $e){
       $e->getMessage();
     }
-    $threadModel = new \Board\Model\Thread();
-   
-    $threadModel->deleteThread($_POST['id']);
 
+    $thread_id = $_POST['id'];
+    $threadModel = new \Board\Model\Thread();
+    $thread = $threadModel->getThreadId($thread_id);
+
+    if($_SESSION['me']['id'] === $thread->user_id){
+      $threadModel->deleteThread($thread_id);
+    }
     header('Location: /BOARD/public/thread_all.php?action=thread_all');
     exit;
   }
@@ -164,15 +167,26 @@ class Thread  extends \Board\Controller
 
   protected function searchThread()
   {
+    try{
+      if(empty($_POST['search'])) {
+        $_SESSION['error_message'] = ('検索が入力されていません。');
+        header('Location: thread_search.php'); 
+        exit;
+      }
+      $this->validateToken();
+    } catch (Exception $e){
+      $e->getMessage();
+    }
 
+    if (strlen($_POST['search']) > 255) {
+      throw new Exception('検索クエリが長すぎます。');
+   }
+  
     $threadModel = new \Board\Model\Thread();
-
-    $searchResult = $threadModel->searchThread($_POST['search']);
-    
+    $searchResult = $threadModel->searchThread($_POST['search']);  
     $_SESSION['search_result'] = $searchResult;
 
     header('Location: thread_result.php');
-
     exit;
   }
 }

@@ -24,6 +24,7 @@ $app->run();
     <input type="hidden" name="type" value="createthread">
     <p id="err3" class="err"></p>
   </div>
+  <p id="errors" class="error"></p>
   <button type="submit" class="btn btn-primary" id="send" >作成</button>
 </form>
 <script src="./js/validation.js"></script>
