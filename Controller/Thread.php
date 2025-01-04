@@ -20,8 +20,6 @@ class Thread  extends \Board\Controller
 
   public function run()
   {
-    var_dump($_SERVER['REQUEST_METHOD']);
-    var_dump($_GET);
     if (! $this->isLoggedIn()) {
       header('Location: signup.php');
       exit();
