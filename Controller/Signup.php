@@ -10,12 +10,12 @@ class Signup  extends \Board\Controller
 {
   public function run()
   {
-    if($this->isLoggedIn()){
-      header('Location: signup.php' );
+    if ($this->isLoggedIn()) {
+      header('Location: signup.php');
       exit();
     }
 
-    if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $this->signup();
     }
   }
