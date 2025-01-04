@@ -10,7 +10,7 @@ $app->run();
 $threads = isset($_SESSION['threads']) ? $_SESSION['threads'] : [];
 $totalPages = isset($_SESSION['total_pages']) ? $_SESSION['total_pages'] : 1;
 $current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 1;
-
+  
 
 ?>
 <h1 class="page__ttl">スレッド一覧</h1>
@@ -50,7 +50,7 @@ $current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 1
 </ul>
 <div class="pagination">
   <?php if ($current_page > 1): ?>
-    <a href="?action=thread_all&page=<?= $current_page - 1; ?>">前のページ</a>
+    <a href="?action=thread_all&page=<?= urlencode($current_page - 1); ?>">前のページ</a>
   <?php endif; ?>
 
   <?php for ($i = 1; $i <= $totalPages; $i++): ?>

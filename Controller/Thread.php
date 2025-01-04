@@ -6,187 +6,62 @@ use Exception;
 require_once(__DIR__ . '/../Model/Thread.php');
 require_once(__DIR__ . '/../Controller/Controller.php');
 require_once(__DIR__ . '/../Controller/Image_upload.php');
+require_once(__DIR__ . '/../Controller/ThreadService.php');
 
 class Thread  extends \Board\Controller
 {
+  private $thread_service;
+
+  public function __construct()
+  {
+    parent::__construct();
+    $this->thread_service = new ThreadService();
+  }
+
   public function run()
   {
-    if ($this->isLoggedIn()) {
-      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-        if ($_POST['type'] === 'createthread') {
-          $this->createThread();
-        }
-
-        if ($_POST['type'] === 'update_thread') {
-          $this->updateThread();
-        }
-
-        if ($_POST['type'] === 'delete_thread') {
-          $this->deleteThread();
-        }
-
-        if ($_POST['type'] === 'search_thread') {
-          $this->searchThread();
-        }
-      }
-
-      if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        if (isset($_GET['action']) && $_GET['action'] === 'thread_all') {
-          $this->threadAll();
-        }
-      }
-    } else {
+    var_dump($_SERVER['REQUEST_METHOD']);
+    var_dump($_GET);
+    if (! $this->isLoggedIn()) {
       header('Location: signup.php');
       exit();
     }
-  }
-
-
-  protected function createThread()
-  {
-    try{
-      if(empty($_POST)){
-       throw new Exception('フォームが送信されていません。');
+    try {
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $this->validateToken();
+        $this->request_post();
+      } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $this->request_get();
       }
-      $this->validateToken();
-     } catch (Exception $e) {
-      $e->getMessage();
-      return;
-     }
-   
-    if(isset($_FILES['image']) && !empty($_FILES['image']['name'])){
-      $image = Image_uploade::upload($_FILES['image']);
+    } catch (Exception $e) {
+      echo "エラーです". $e->getMessage();
+      exit;
+    }
+  }
+  private function request_post() {
+    switch ($_POST['type']) {
+      case 'createthread':
+        $this->thread_service->create_thread();
+        break;
+      case 'update_thread':
+        $this->thread_service->update_thread();
+        break;
+      case 'delete_thread':
+        $this->thread_service->delete_thread();
+        break;
+      case 'search_thread':
+        $this->thread_service->search_thread();
+        break;
+      default:
+        throw new \Exception('無効なリクエストです。');
+    }
+  }
+  private function request_get()
+  {
+    if (isset($_GET['action']) && $_GET['action'] === 'thread_all') {
+      $this->thread_service->thread_all();
     } else {
-      $image = null;
+      throw new \Exception('無効なリクエストです。');
     }
-
-    $threadModel = new \Board\Model\Thread();
-
-    $threadModel->createThread([
-      'title' => $_POST['title'],
-      'comment' => $_POST['comment'],
-      'user_id' => $_SESSION['me']['id'],
-      'image' => $image
-    ]);
-
-    $response = array(
-      "status" => "success",
-      "message" => "スレッドが作成されました"
-    );
-
-    header("Content-type: application/json; charset=UTF-8");
-
-    echo json_encode($response);
-    header('Location: thread_all.php');
-    exit;
-  }
-
-  protected function updateThread()
-  {
-    try{
-      if(empty($_POST)){
-       throw new Exception('フォームが送信されていません。');
-      }
-      $this->validateToken();
-     } catch (Exception $e) {
-      $e->getMessage();
-      return;
-     }
-     
-    $threadModel = new \Board\Model\Thread();
-
-    $current_image = $threadModel->getThreadId($_POST['id']);
-    $dir = __DIR__ . '/../public/uploads/'; 
-
-    // 既存の画像がある場合、削除する
-    if (!empty($current_image->image) && file_exists($dir . $current_image->image)) {
-        unlink($dir . $current_image->image); // 既存ファイルを削除
-      }
-      
-    // 新しい画像をアップロード
-    $image = Image_uploade::upload($_FILES['image']);
-      
-    $threadModel->updateThread([
-      'title' => $_POST['title'],
-      'comment' => $_POST['comment'],
-      'id' => $_POST['id'],
-      'user_id' => $_SESSION['me']['id'],
-      'image' => $image
-    ]);
-
-    header('Location: thread_all.php');
-    exit;
-  }
-
-  protected function deleteThread()
-  {
-    try{
-      $this->validateToken();
-    } catch(Exception $e){
-      $e->getMessage();
-    }
-
-    $thread_id = $_POST['id'];
-    $threadModel = new \Board\Model\Thread();
-    $thread = $threadModel->getThreadId($thread_id);
-
-    if($_SESSION['me']['id'] === $thread->user_id){
-      $threadModel->deleteThread($thread_id);
-    }
-    header('Location: /BOARD/public/thread_all.php?action=thread_all');
-    exit;
-  }
-
-  protected function threadAll()
-  {
-    $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-    $perPage = 5;
-    // ページ番号に基づいてデータの開始位置を計算
-    $offset = ($page - 1) * $perPage;
-
-    $threadModel = new \Board\Model\Thread();
-
-    // オフセットとページ当たりのアイテム数を指定して取得
-    $threads = $threadModel->getThreadAll($offset, $perPage);
-
-    // 投稿の総数
-    $totalThreads = $threadModel->getThreadCount();
-
-    // 総ページを計算
-    $totalPages = ceil($totalThreads / $perPage);
-
-    $_SESSION['threads'] = $threads;
-    $_SESSION['total_pages'] = $totalPages;
-    $_SESSION['current_page'] = $page;
- 
-    header('Location: thread_all.php');
-
-    exit;
-  }
-
-  protected function searchThread()
-  {
-    try{
-      if(empty($_POST['search'])) {
-        $_SESSION['error_message'] = ('検索が入力されていません。');
-        header('Location: thread_search.php'); 
-        exit;
-      }
-      $this->validateToken();
-    } catch (Exception $e){
-      $e->getMessage();
-    }
-
-    if (strlen($_POST['search']) > 255) {
-      throw new Exception('検索クエリが長すぎます。');
-   }
-  
-    $threadModel = new \Board\Model\Thread();
-    $searchResult = $threadModel->searchThread($_POST['search']);  
-    $_SESSION['search_result'] = $searchResult;
-
-    header('Location: thread_result.php');
-    exit;
   }
 }
