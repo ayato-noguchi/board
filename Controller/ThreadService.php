@@ -137,7 +137,6 @@ class ThreadService extends \Board\Controller
 
   public function thread_all()
   {
-    var_dump('ゴイゴイスー');
     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
     $perPage = 5;
     // ページ番号に基づいてデータの開始位置を計算
