@@ -8,12 +8,11 @@ $app->run();
 $threads = isset($_SESSION['threads']) ? $_SESSION['threads'] : [];
 $totalPages = isset($_SESSION['total_pages']) ? $_SESSION['total_pages'] : 1;
 $current_page = isset($_SESSION['current_page']) ? $_SESSION['current_page'] : 1;
-$date = new DateTime($thread->modified_at);
 ?>
 <h1 class="page__ttl">スレッド一覧</h1>
 <ul class="thread">
   <?php
-  foreach ($threads as $thread):
+    foreach ($threads as $thread):
   ?>
     <li class="thread__item">
       <div class="thread__head">
@@ -50,7 +49,11 @@ $date = new DateTime($thread->modified_at);
           <a href="thread_update.php?id=<?= urlencode($thread->id); ?>">投稿編集</a>
           <a href="thread_delete.php?id=<?= urlencode($thread->id); ?>">投稿削除</a>
         <?php endif; ?>
-        <p class="thread__date">スレッド作成日 <?php echo h($date->format('Y年m月d日 H:i:s')); ?></p>
+        <p class="thread__date">スレッド作成日 
+          <?php 
+            echo date('Y年m月d日 H:i:s', strtotime($thread->modified_at));
+          ?>
+        </p>
       </div>
     </li>
   <?php endforeach ?>

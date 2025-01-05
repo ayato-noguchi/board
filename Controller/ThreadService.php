@@ -15,58 +15,33 @@ class ThreadService extends \Board\Controller
     // $this->thread = new Thread();
   }
 
-
   public function create_thread()
   {
-    try{
-      if(empty($_POST)){
-       throw new Exception('フォームが送信されていません。');
-      }
-      $this->validateToken();
-     } catch (Exception $e) {
-      $e->getMessage();
-      return;
-     }
-   
-    if(isset($_FILES['image']) && !empty($_FILES['image']['name'])){
-      $image = Image_uploade::upload($_FILES['image']);
-    } else {
-      $image = null;
-    }
-
+    var_dump($_SERVER['REQUEST_METHOD']);
     $threadModel = new \Board\Model\Thread();
-
-    $threadModel->createThread([
-      'title' => $_POST['title'],
-      'comment' => $_POST['comment'],
-      'user_id' => $_SESSION['me']['id'],
-      'image' => $image
-    ]);
-
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+      if ( isset($_FILES['image']) && ! empty($_FILES['image']['name'])) {
+        $image = Image_uploade::upload($_FILES['image']);
+      } else {
+        $image = null;
+      }
+      $threadModel->createThread([
+        'title' => $_POST['title'],
+        'comment' => $_POST['comment'],
+        'user_id' => $_SESSION['me']['id'],
+        'image' => $image
+      ]);
+    }
     $response = array(
       "status" => "success",
       "message" => "スレッドが作成されました"
     );
-
-    header("Content-type: application/json; charset=UTF-8");
-
+    // header("Content-type: application/json; charset=UTF-8");
     echo json_encode($response);
-    header('Location: thread_all.php');
-    exit;
   }
 
   public function update_thread()
   {
-    try{
-      if(empty($_POST)){
-       throw new Exception('フォームが送信されていません。');
-      }
-      $this->validateToken();
-     } catch (Exception $e) {
-      $e->getMessage();
-      return;
-     }
-     
     $threadModel = new \Board\Model\Thread();
 
     $current_image = $threadModel->getThreadId($_POST['id']);

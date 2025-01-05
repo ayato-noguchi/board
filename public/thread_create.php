@@ -21,7 +21,7 @@ $app->run();
     <label>画像</label>
     <input type="file" name="image" id="image" class="form-control">
     <input type="hidden" name="token" value="<?= h($_SESSION['token']) ; ?>">
-    <input type="hidden" name="type" value="createthread">
+    <input type="hidden" name="type" value="create_thread">
     <p id="err3" class="err"></p>
   </div>
   <p id="errors" class="error"></p>

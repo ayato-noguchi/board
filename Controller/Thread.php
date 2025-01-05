@@ -38,7 +38,7 @@ class Thread  extends \Board\Controller
   }
   private function request_post() {
     switch ($_POST['type']) {
-      case 'createthread':
+      case 'create_thread':
         $this->thread_service->create_thread();
         break;
       case 'update_thread':
@@ -56,9 +56,19 @@ class Thread  extends \Board\Controller
   }
   private function request_get()
   {
-    if (isset($_GET['action']) && $_GET['action'] === 'thread_all') {
-      $this->thread_service->thread_all();
-    } else {
+    // if (isset($_GET['action']) && $_GET['action'] === 'thread_all') {
+    //   $this->thread_service->thread_all();
+    // } else {
+    //   throw new \Exception('無効なリクエストです。');
+    // }
+    switch ($_GET['action']) {
+      case 'thread_all':
+        $this->thread_service->thread_all();
+      break;
+      case 'create':
+        $this->thread_service->create_thread();
+      break;
+      default:
       throw new \Exception('無効なリクエストです。');
     }
   }
