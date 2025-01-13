@@ -10,14 +10,16 @@ class ThreadService extends \Board\Controller
 {
   private $thread;
 
-  //このクラスを機能だけにする
-  public function __construct() {
-    // $this->thread = new Thread();
+  public function get_create_thread() 
+  {
+    if (! isset($_GET['action']) || $_GET['action'] !== 'create') {
+      header('Location: thread_create.php?action=create');
+      exit();
+    }
   }
-
+  
   public function create_thread()
   {
-    var_dump($_SERVER['REQUEST_METHOD']);
     $threadModel = new \Board\Model\Thread();
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       if ( isset($_FILES['image']) && ! empty($_FILES['image']['name'])) {
@@ -36,7 +38,7 @@ class ThreadService extends \Board\Controller
       "status" => "success",
       "message" => "スレッドが作成されました"
     );
-    // header("Content-type: application/json; charset=UTF-8");
+    header("Content-type: application/json; charset=UTF-8");
     echo json_encode($response);
   }
 
